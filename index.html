@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KIIT School Fee Invoice Generator</title>
+    <title>KIIT Invoice Generator - Complete Edition</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,9 +17,14 @@
         <header class="header">
             <h1>One-Click Generation</h1>
             <p class="subtitle">Auto-Generate All Details</p>
-            <a href="https://youtube.com" target="_blank" class="youtube-link">
-                🔥 Join my channel to learn about Veo 3 Google Gemini Pro
-            </a>
+            <div class="youtube-links">
+                <a href="https://youtube.com" target="_blank" class="youtube-link flashing">
+                    🔥 Join my channel to learn about Veo 3 Google Gemini Pro
+                </a>
+                <a href="https://youtube.com" target="_blank" class="youtube-link flashing">
+                    🔥 Visit : Stepin AI (YouTube Channel)
+                </a>
+            </div>
         </header>
 
         <!-- Main Content -->
@@ -31,6 +36,65 @@
                     <button type="button" class="btn btn--primary btn--full-width" id="autoGenerateBtn">
                         Auto-Generate All Details
                     </button>
+                </div>
+
+                <!-- Enhanced Custom Student Names Section -->
+                <div class="form-section" id="customStudentNamesSection">
+                    <h3>Custom Student Names (Bulk Generation)</h3>
+                    <div class="form-group">
+                        <label for="countrySelect" class="form-label">Select Country for Name Generation</label>
+                        <select id="countrySelect" class="form-control">
+                            <option value="custom">Custom Names</option>
+                            <option value="india">India</option>
+                            <option value="usa">USA</option>
+                            <option value="uk">United Kingdom</option>
+                            <option value="australia">Australia</option>
+                            <option value="canada">Canada</option>
+                            <option value="germany">Germany</option>
+                            <option value="france">France</option>
+                            <option value="japan">Japan</option>
+                            <option value="china">China</option>
+                            <option value="brazil">Brazil</option>
+                            <option value="cambodia">Cambodia (Khmer)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn--outline btn--full-width" id="generateCountryNamesBtn">
+                            Generate Names for Selected Country
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label for="customStudentNames" class="form-label">Custom Student Names (one per line)</label>
+                        <textarea id="customStudentNames" class="form-control" rows="8" placeholder="Enter custom student names, one per line...&#10;John Smith&#10;Jane Doe&#10;Mike Johnson&#10;&#10;OR select a country above and click 'Generate Names'"></textarea>
+                        <small class="helper-text">
+                            📝 <strong>Instructions:</strong> Enter student names (one per line) OR select a country and generate names automatically. These names will be used for bulk invoice generation.
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Bulk Invoice Generation -->
+                <div class="form-section" id="bulkGenerationSection">
+                    <h3>Bulk Invoice Generation</h3>
+                    <div class="bulk-controls">
+                        <div class="form-group">
+                            <label for="bulkCount" class="form-label">Number of Invoices</label>
+                            <input type="number" id="bulkCount" class="form-control" value="10" min="1" max="50">
+                        </div>
+                        <div class="bulk-buttons">
+                            <button type="button" class="btn btn--secondary" id="generateBulkBtn">
+                                Generate Bulk Invoices
+                            </button>
+                            <button type="button" class="btn btn--primary" id="downloadBulkBtn" disabled>
+                                Download Bulk ZIP
+                            </button>
+                        </div>
+                        <div id="bulkProgress" class="bulk-progress hidden">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <span id="progressText">Generating invoices...</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- School Logo Upload -->
@@ -45,8 +109,11 @@
                                 <span class="file-status">No file chosen</span>
                             </label>
                         </div>
-                        <div class="logo-preview-container">
-                            <img id="logoFormPreview" class="logo-form-preview hidden" alt="Logo Preview">
+                        <div class="image-preview-container">
+                            <img id="logoPreviewForm" class="image-preview hidden" alt="Logo Preview">
+                            <div id="logoPlaceholder" class="image-placeholder">
+                                School logo preview will appear here
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -66,11 +133,14 @@
                         <label for="contactInfo" class="form-label">Contact Information</label>
                         <textarea id="contactInfo" class="form-control" rows="2">Phone: +91 80807 35735
 Email: info@kiit.ac.in</textarea>
+                        <small class="helper-text">
+                            📧 <strong>Note:</strong> Email addresses will automatically become clickable mailto links in the invoice preview.
+                        </small>
                     </div>
                 </div>
 
                 <!-- Student Information -->
-                <div class="form-section">
+                <div class="form-section" id="studentInformationSection">
                     <h3>Student Information</h3>
                     <div class="form-group">
                         <label for="studentName" class="form-label">Student Name <span class="required">*</span></label>
@@ -88,9 +158,10 @@ Email: info@kiit.ac.in</textarea>
                         <label for="rollNumber" class="form-label">Roll Number <span class="required">*</span></label>
                         <input type="text" id="rollNumber" class="form-control" required>
                     </div>
-                    <div class="form-group">
-                        <label for="parentName" class="form-label">Parent/Guardian Name <span class="required">*</span></label>
-                        <input type="text" id="parentName" class="form-control" required>
+                    <!-- REMOVED: Parent/Guardian Name field - this field is hidden by CSS and JavaScript -->
+                    <div class="form-group hidden-field" style="display: none;">
+                        <label for="parentName" class="form-label" style="display: none;">Parent/Guardian Name <span class="required">*</span></label>
+                        <input type="text" id="parentName" class="form-control" style="display: none;">
                     </div>
                 </div>
 
@@ -124,100 +195,59 @@ Email: info@kiit.ac.in</textarea>
                     </div>
                 </div>
 
-                <!-- Custom Student Names (Bulk Generation) -->
-                <div class="form-section">
-                    <h3>Custom Student Names (Bulk Generation)</h3>
-                    <div class="form-group">
-                        <label for="countrySelect" class="form-label">Country Selection</label>
-                        <select id="countrySelect" class="form-control">
-                            <option value="custom">Custom Names</option>
-                            <option value="india">India</option>
-                            <option value="usa">USA</option>
-                            <option value="uk">UK</option>
-                            <option value="australia">Australia</option>
-                            <option value="canada">Canada</option>
-                            <option value="germany">Germany</option>
-                            <option value="france">France</option>
-                            <option value="japan">Japan</option>
-                            <option value="china">China</option>
-                            <option value="brazil">Brazil</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn--secondary btn--full-width" id="generateCountryNamesBtn">
-                            Generate Names for Custom Names
-                        </button>
-                    </div>
-                    <div class="form-group">
-                        <label for="customStudentNames" class="form-label">Student Names (One per line)</label>
-                        <textarea id="customStudentNames" class="form-control" rows="8" placeholder="Enter custom student names, one per line..."></textarea>
-                    </div>
-                </div>
-
-                <!-- Signature & Stamp -->
+                <!-- Signature & Stamp - Enhanced -->
                 <div class="form-section">
                     <h3>Signature & Stamp</h3>
                     
-                    <!-- Stamp Upload -->
+                    <!-- Auto-Generate Signatory Button -->
+                    <div class="form-group">
+                        <button type="button" class="btn btn--outline btn--full-width" id="autoGenerateSignatoryBtn">
+                            Auto-Generate Signatory Name/Title
+                        </button>
+                    </div>
+                    
+                    <!-- Stamp Area -->
                     <div class="form-group">
                         <label class="form-label">Stamp Area</label>
-                        <div class="file-upload-wrapper">
-                            <input type="file" id="stampUpload" accept="image/*" class="file-input">
-                            <label for="stampUpload" class="file-label">
-                                <span class="file-text">Upload Stamp</span>
-                                <span class="file-status">No stamp chosen</span>
-                            </label>
-                        </div>
-                        <div class="image-preview-container">
-                            <img id="stampFormPreview" class="image-form-preview hidden" alt="Stamp Preview">
+                        <div class="image-upload-section">
+                            <div class="file-upload-wrapper">
+                                <input type="file" id="stampImage" accept="image/*" class="file-input">
+                                <label for="stampImage" class="file-label">
+                                    <span class="file-text">Upload Stamp</span>
+                                    <span class="file-status">No file chosen</span>
+                                </label>
+                            </div>
+                            <div class="image-preview-container">
+                                <img id="stampPreviewImg" class="image-preview hidden" alt="Stamp Preview">
+                                <div id="stampPlaceholder" class="image-placeholder">
+                                    Official institutional stamp will be placed here
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Signature Upload -->
+                    <!-- Authorized Signatory -->
                     <div class="form-group">
                         <label class="form-label">Authorized Signatory</label>
-                        <div class="file-upload-wrapper">
-                            <input type="file" id="signatureUpload" accept="image/*" class="file-input">
-                            <label for="signatureUpload" class="file-label">
-                                <span class="file-text">Upload Signature</span>
-                                <span class="file-status">No signature chosen</span>
-                            </label>
+                        <div class="form-group">
+                            <label for="signatoryTitle" class="form-label">Signatory Name/Title</label>
+                            <input type="text" id="signatoryTitle" class="form-control" placeholder="Principal/Accountant">
                         </div>
-                        <div class="image-preview-container">
-                            <img id="signatureFormPreview" class="image-form-preview hidden" alt="Signature Preview">
+                        <div class="image-upload-section">
+                            <div class="file-upload-wrapper">
+                                <input type="file" id="signatureImage" accept="image/*" class="file-input">
+                                <label for="signatureImage" class="file-label">
+                                    <span class="file-text">Upload Signature</span>
+                                    <span class="file-status">No file chosen</span>
+                                </label>
+                            </div>
+                            <div class="image-preview-container">
+                                <img id="signaturePreviewImg" class="image-preview hidden" alt="Signature Preview">
+                                <div id="signaturePlaceholder" class="image-placeholder">
+                                    Authorized signature will be placed here
+                                </div>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Signatory Name/Title -->
-                    <div class="form-group">
-                        <label for="authorizedSignatory" class="form-label">Signatory Name/Title</label>
-                        <input type="text" id="authorizedSignatory" class="form-control" placeholder="Enter signatory name and title">
-                        <button type="button" class="btn btn--secondary mt-8" id="autoGenerateSignatory">
-                            Auto-Generate Signatory
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Bulk Invoice Generation -->
-                <div class="form-section">
-                    <h3>Generate Bulk Invoices</h3>
-                    <div class="form-group">
-                        <label for="bulkCount" class="form-label">Number of Invoices</label>
-                        <input type="number" id="bulkCount" class="form-control" min="1" max="50" value="10">
-                    </div>
-                    <div class="bulk-actions">
-                        <button type="button" class="btn btn--outline btn--full-width" id="generateBulkBtn">
-                            Generate Bulk Invoices
-                        </button>
-                        <button type="button" class="btn btn--primary btn--full-width mt-8 hidden" id="downloadBulkBtn">
-                            Download Bulk ZIP
-                        </button>
-                    </div>
-                    <div class="progress-container hidden">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progressFill"></div>
-                        </div>
-                        <p class="progress-text" id="progressText">Generating invoices...</p>
                     </div>
                 </div>
             </div>
@@ -233,7 +263,7 @@ Email: info@kiit.ac.in</textarea>
                         <div class="school-info">
                             <h2 id="previewSchoolName">KALINGA INSTITUTE OF INDUSTRIAL TECHNOLOGY</h2>
                             <p id="previewSchoolAddress">KIIT Rd, Patia, Bhubaneswar, Odisha 751024, India</p>
-                            <p id="previewContactInfo">Phone: +91 80807 35735<br>Email: <a href="mailto:info@kiit.ac.in">info@kiit.ac.in</a></p>
+                            <p id="previewContactInfo">Phone: +91 80807 35735<br>Email: <a href="mailto:info@kiit.ac.in" class="email-link">info@kiit.ac.in</a></p>
                         </div>
                     </div>
 
@@ -254,10 +284,11 @@ Email: info@kiit.ac.in</textarea>
                         </div>
                     </div>
 
-                    <!-- Bill To Section -->
+                    <!-- Bill To Section - REMOVED Parent/Guardian Name -->
                     <div class="bill-to">
                         <h4>Bill To:</h4>
-                        <p><strong id="previewParentName">-</strong></p>
+                        <!-- REMOVED: Parent/Guardian Name line - hidden by CSS and JavaScript -->
+                        <p style="display: none;"><strong id="previewParentName">-</strong></p>
                         <p>Student: <span id="previewStudentName">-</span></p>
                         <p>Class: <span id="previewStudentClass">-</span> | Section: <span id="previewSection">-</span></p>
                         <p>Roll Number: <span id="previewRollNumber">-</span></p>
@@ -296,7 +327,7 @@ Email: info@kiit.ac.in</textarea>
                         <p><strong>Payment Mode:</strong> <span id="previewPaymentMode">-</span></p>
                         <p><strong>Payment Details:</strong></p>
                         <p id="previewPaymentDetails">-</p>
-                        <p><strong>Payment Status:</strong> <span class="status status--paid">PAID IN FULL</span></p>
+                        <p><strong>Payment Status:</strong> <span class="status status--paid-full">PAID IN FULL</span></p>
                         <p><strong>Payment Date:</strong> <span id="previewPaymentDate">-</span></p>
                     </div>
 
@@ -304,23 +335,24 @@ Email: info@kiit.ac.in</textarea>
                     <div class="invoice-footer">
                         <div class="disclaimer">
                             <p><strong>Note:</strong> This is a computer-generated receipt and does not require a physical signature.</p>
-                            <p>For any queries, please contact us at <a href="mailto:info@kiit.ac.in">info@kiit.ac.in</a></p>
+                            <p>For any queries, please contact us at <a href="mailto:info@kiit.ac.in" class="email-link">info@kiit.ac.in</a></p>
                         </div>
                         <div class="signature-section">
                             <div class="stamp-preview">
                                 <p><strong>School Stamp:</strong></p>
                                 <div class="stamp-area">
-                                    <img id="stampImagePreview" class="stamp-signature-image hidden" alt="Stamp">
-                                    <span id="previewStampText" class="stamp-placeholder">Official institutional stamp will be placed here</span>
+                                    <img id="invoiceStampImg" class="invoice-image hidden" alt="School Stamp">
+                                    <span id="invoiceStampPlaceholder" class="image-placeholder-text">Official institutional stamp will be placed here</span>
                                 </div>
                             </div>
                             <div class="signature-preview">
                                 <p><strong>Authorized Signatory:</strong></p>
-                                <div class="signature-area">
-                                    <img id="signatureImagePreview" class="stamp-signature-image hidden" alt="Signature">
-                                    <div class="signature-line">
-                                        <span id="previewSignatory">-</span>
-                                    </div>
+                                <div class="signature-line">
+                                    <img id="invoiceSignatureImg" class="invoice-image hidden" alt="Signature">
+                                    <span id="invoiceSignaturePlaceholder" class="image-placeholder-text">Authorized signature will be placed here</span>
+                                </div>
+                                <div class="signatory-title">
+                                    <span id="previewSignatoryTitle">-</span>
                                 </div>
                             </div>
                         </div>
@@ -328,38 +360,53 @@ Email: info@kiit.ac.in</textarea>
                 </div>
             </div>
         </div>
-
-        <!-- Social Media Footer -->
-        <footer class="footer">
-            <div class="social-links">
-                <a href="https://youtube.com/@stepinai" target="_blank" class="social-link">
-                    🎬 YouTube
-                </a>
-                <a href="https://tiktok.com/@stepinai" target="_blank" class="social-link">
-                    🎵 TikTok
-                </a>
-                <a href="https://t.me/stepinai" target="_blank" class="social-link">
-                    💬 Telegram
-                </a>
-                <a href="https://github.com/stepinai" target="_blank" class="social-link">
-                    💻 GitHub
-                </a>
-            </div>
-            <div class="footer-content">
-                <p class="footer-description">Professional Invoice Generator for Educational Institutions</p>
-                <nav class="footer-nav">
-                    <a href="#terms" class="footer-nav-link">Terms of Service</a>
-                    <a href="#privacy" class="footer-nav-link">Privacy Policy</a>
-                    <a href="#contact" class="footer-nav-link">Contact Us</a>
-                    <a href="#about" class="footer-nav-link">About</a>
-                </nav>
-                <p class="footer-copyright">© 2025 StepinAI. All rights reserved.</p>
-            </div>
-        </footer>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/jszip@3.7.1/dist/jszip.min.js"></script>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <!-- Enhanced Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Copyright Section -->
+            <div class="footer-section footer-copyright">
+                <p>&copy; 2025 StepinAI. All rights reserved.</p>
+                <p class="footer-description">Professional Invoice Generator for Educational Institutions</p>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="footer-section footer-navigation">
+                <h4>Quick Links</h4>
+                <ul class="footer-nav-list">
+                    <li><a href="#terms" class="footer-link">Terms of Service</a></li>
+                    <li><a href="#privacy" class="footer-link">Privacy Policy</a></li>
+                    <li><a href="#contact" class="footer-link">Contact Us</a></li>
+                    <li><a href="#about" class="footer-link">About</a></li>
+                </ul>
+            </div>
+
+            <!-- Social Media Section -->
+            <div class="footer-section footer-social">
+                <h4>Connect With Us</h4>
+                <div class="social-media-links">
+                    <a href="https://youtube.com" target="_blank" class="social-link youtube-social">
+                        <span class="social-icon">🎬</span>
+                        <span class="social-text">YouTube</span>
+                    </a>
+                    <a href="https://tiktok.com" target="_blank" class="social-link tiktok-social">
+                        <span class="social-icon">🎵</span>
+                        <span class="social-text">TikTok</span>
+                    </a>
+                    <a href="https://t.me/stepinai" target="_blank" class="social-link telegram-social">
+                        <span class="social-icon">💬</span>
+                        <span class="social-text">Telegram</span>
+                    </a>
+                    <a href="https://github.com/stepinai" target="_blank" class="social-link github-social">
+                        <span class="social-icon">💻</span>
+                        <span class="social-text">GitHub</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
     <script src="app.js"></script>
 </body>
 </html>
